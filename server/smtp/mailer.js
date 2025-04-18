@@ -16,7 +16,7 @@ const sendMail = async (user) => {
 
   let mailOptions = {
     from: `"Car2U" <${process.env.SMTP_USER}>`,
-    to: [process.env.SMTP_USER, "car2025u@gmail.com"], // your admin inbox
+    to: [process.env.SMTP_USER, "car2025u@gmail.com", "yulian.kalchev@abv.bg"], // your admin inbox
     subject: `Ново запитване от ${name}`,
     html: `
       <h3>Ново запитване</h3>
