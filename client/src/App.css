@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Mea+Culpa&family=Poppins:wght@100&family=Sarabun:wght@700&family=Space+Grotesk:wght@600&family=Tektur&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Mea+Culpa&family=Open+Sans:wght@800&family=Poppins:wght@100&family=Sarabun:wght@700&family=Space+Grotesk:wght@600&family=Tektur&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*::selection {
+  color: white;
+  background-color: #CC2B52;
+}
+
+h4,
+h5,
+h6,
+p,
+li {
+  font-family: "Montserrat";
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Montserrat" sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #dbcdff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff,
+    #f5d2da,
+    #ec9bad,
+    #e26d85,
+    #cc2b52
+  );  
+  border-radius: 20px;
+}
+
+.marginStyle {
+  margin-top: 120px;
+  margin-bottom: 150px;
+}
+
+.cartStyle {
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff,
+    #f5d2da,
+    #ec9bad,
+    #e26d85,
+    #cc2b52
+  );
+}
+
+@media (max-width: 485px) {
+  .sizePrice {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 486px) {
+  .sizePrice {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .respName {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 991px) {
+  .respName {
+    font-size: 15px;
+  }
+  .respBrand {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 991px) and (min-width: 480px) {
+  .filterRes {
+    text-align: center;
+  }
+}
