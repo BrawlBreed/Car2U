@@ -19,8 +19,10 @@ const Footer = () => {
                         <div className="col-lg-4 px-lg-5 mb-4 mb-lg-0">
                             <h3 className="footer_title" style={{ color: '#CC2B52' }}>Контакт</h3>
                             <p className="footer_text">
+                                <a>+359 899763573</a><br />
+                                <a>+359 899944018</a><br />
                                 <a href="mailto:info@car2u.bg">info@car2u.bg</a><br />
-                                <a className="footer-address">гр. София, България<br />ул. Примерна 123</a>
+                                <a className="footer-address">гр. София, България<br />ул. Бигла 30</a>
                             </p>
                         </div>
                         <div className="col-lg-3 mb-4 mb-lg-0">
