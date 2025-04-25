@@ -3,6 +3,7 @@ import '../styles/contactform.css';
 import { useAuth } from '../context/auth';
 import { useCart } from '../context/cart';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ContactForm = () => {
     const [cart, setcart] = useCart();
@@ -57,8 +58,14 @@ const ContactForm = () => {
     const res = await axios.post(`${process.env.REACT_APP_URL ?  process.env.REACT_APP_URL : process.env.REACT_APP_API_URL}/api/order/sendMessage`, {
       form
     });
-
-    console.log(res)
+    if(res.status === 200 || res.status === 201){
+      setcart([])
+      localStorage.setItem('cart', JSON.stringify([]))
+      toast.success("Успешно изпратихте заявка към нас.")
+      toast.loading("Ще се свържем С Вас при първа възможност!")
+      setTimeout(() => window.location.href = "/", 3500)
+      
+    }
   };
 
   return (
