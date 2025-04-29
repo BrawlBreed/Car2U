@@ -25,11 +25,38 @@ import CarsFilterpage from './Home/CarsFilterpage';
 import CarView from './pages/CarView';
 import { Toaster } from 'react-hot-toast';
 import CarInBrand from './pages/CarInBrand';
+import PrivacyPolicy from './Links/PrivacyPolicy';
+import TermsConditions from './Links/Terms';
+import CookiePolicy from './Links/Cookies';
+import CookieConsent from 'react-cookie-consent';
 
 function App() {
   return (
     <Router>
       <Navbar/>
+      <>
+        <CookieConsent
+          location="bottom"
+          buttonText="Приемам"
+          declineButtonText="Отхвърлям"
+          cookieName="car2u_cookie_consent"
+          style={{ background: '#fff', color: '#333', boxShadow: '0 -2px 10px rgba(0,0,0,0.1)' }}
+          buttonStyle={{ background: '#CC2B52', color: '#fff', fontSize: '14px', padding: '8px 16px' }}
+          declineButtonStyle={{ background: 'transparent', color: '#CC2B52', border: '1px solid #CC2B52', padding: '8px 16px' }}
+          enableDeclineButton
+          onAccept={() => {
+            console.log('cookies accepted')
+          }}
+          onDecline={() => {
+            console.log('cookies declined')
+          }}
+        >
+          Използваме бисквитки, за да подобрим вашето преживяване на сайта. 
+          <a href="/cookies" style={{ textDecoration: 'underline', marginLeft: '4px' }}>
+            Научете повече
+          </a>
+        </CookieConsent>
+      </>
       <Routes>
       <Route path='/' element={<HomeMain />} />
       <Route path='/cart' element={<Cart/>} />
@@ -41,6 +68,10 @@ function App() {
       <Route path='/car/:slug' element={<CarView/>} />
       <Route path='/brand/:slug' element={<CarInBrand/>} />
       <Route path='/*' element={<NotFound/>} />
+      {/* Links */}
+      <Route path='/privacyPolicy' element={<PrivacyPolicy/>}/>
+      <Route path='/terms' element={<TermsConditions/>}/>
+      <Route path='/cookies' element={<CookiePolicy/>}/>
       <Route path='/dashboard' element={<AdminRoutes/>}>
             <Route path='admin' element={<AdminDashboard/>} />
             <Route path='admin/allbrands' element={<BrandsList/>} />

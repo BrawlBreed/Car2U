@@ -2,6 +2,7 @@ import React from 'react'
 import '../styles/footer.css'
 import { BsLinkedin, BsGithub, BsFacebook, BsInstagram, BsTiktok } from 'react-icons/bs'
 import logo from '../images/logo.png'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
@@ -33,6 +34,17 @@ const Footer = () => {
                                 <a href="https://www.linkedin.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsLinkedin size={25} /></a>
                                 <a href="https://www.tiktok.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsTiktok size={25} /></a>
                             </p>
+                            <h3 className="footer_title" style={{ color: '#CC2B52' }}>Важни връзки</h3>
+                            <div className='row'>
+                                <p>
+                                    <Link to="/privacyPolicy">Полититка за Поверителност</Link>
+                                    <br/>
+                                    <Link to="/terms">Общи условия</Link>
+                                    <br/>
+                                    <Link to="/cookies">Политика за използване на "бисквитки"</Link>
+                                </p>
+
+                            </div>
                         </div>
                         <div className="col-12 footer_credits text-center">
                             <span>© 2025 <a> Car2U</a>™. Всички права запазени.</span>

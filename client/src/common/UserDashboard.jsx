@@ -13,7 +13,7 @@ const UserDashboard = () => {
                         <UserMenu />
                     </div>
                     <div className='col-md-9 mt-4'>
-                        <h3 className='text-center'>Welcome, {auth?.user?.name}</h3>
+                        <h3 className='text-center'>Добре дошъл, {auth?.user?.name}</h3>
                     </div>
                 </div>
             </div>

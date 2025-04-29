@@ -26,7 +26,7 @@ const UserProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.put(`${process.env.REACT_APP_URL ?  process.env.REACT_APP_URL : process.env.REACT_APP_API_URL}/api/user/profileUpdate`, {
+            const { data } = await axios.put(`${process.env.REACT_APP_URL ? process.env.REACT_APP_URL : process.env.REACT_APP_API_URL}/api/user/profileUpdate`, {
                 name,
                 email,
                 password,
@@ -41,12 +41,13 @@ const UserProfile = () => {
                 ls = JSON.parse(ls);
                 ls.user = data.updatedUser;
                 localStorage.setItem("auth", JSON.stringify(ls));
-                toast.success("Profile Updated Successfully");
+                toast.success("Профилът беше обновен успешно");
                 navigate('/')
             }
         } catch (error) {
         }
     };
+
     return (
         <div className='container marginStyle'>
             <div className='container-fluid'>
@@ -55,43 +56,43 @@ const UserProfile = () => {
                         <UserMenu />
                     </div>
                     <div className='col-md-9 my-3'>
-                        <h3 className='text-center'>Update Profile</h3>
-                        <div className="card text-black mb-5" >
+                        <h3 className='text-center'>Обновяване на профил</h3>
+                        <div className="card text-black mb-5">
                             <div className="card-body p-md-5">
                                 <div className="row justify-content-center">
                                     <form className="mx-1 mx-md-4">
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <div className="form-outline flex-fill mb-0">
-                                                <label className="form-label" for="form3Example1c">Name</label>
+                                                <label className="form-label" htmlFor="form3Example1c">Име</label>
                                                 <input value={name} onChange={(e) => setName(e.target.value)} type="email" id="form3Example1c" className="form-control" required />
                                             </div>
                                         </div>
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <div className="form-outline flex-fill mb-0">
-                                                <label className="form-label" for="form3Example1c">Email</label>
+                                                <label className="form-label" htmlFor="form3Example1c">Имейл</label>
                                                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="form3Example1c" className="form-control" required />
                                             </div>
                                         </div>
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <div className="form-outline flex-fill mb-0">
-                                                <label className="form-label" for="form3Example4c">Password</label>
+                                                <label className="form-label" htmlFor="form3Example4c">Парола</label>
                                                 <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="form3Example4c" className="form-control" required />
                                             </div>
                                         </div>
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <div className="form-outline flex-fill mb-0">
-                                                <label className="form-label" for="form3Example1c">Phone</label>
+                                                <label className="form-label" htmlFor="form3Example1c">Телефон</label>
                                                 <input value={phone} onChange={(e) => setPhone(e.target.value)} type="email" id="form3Example1c" className="form-control" required />
                                             </div>
                                         </div>
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <div className="form-outline flex-fill mb-0">
-                                                <label className="form-label" for="form3Example1c">Address</label>
-                                                <textarea rows={4} value={address} onChange={(e) => setAddress(e.target.value)} type="email" id="form3Example1c" className="form-control" required />
+                                                <label className="form-label" htmlFor="form3Example1c">Адрес</label>
+                                                <textarea rows={4} value={address} onChange={(e) => setAddress(e.target.value)} id="form3Example1c" className="form-control" required />
                                             </div>
                                         </div>
                                         <div className="d-flex justify-content-center mx-4">
-                                            <button onClick={handleSubmit} type="button" className="btn btn-primary btn-lg">Update</button>
+                                            <button onClick={handleSubmit} type="button" className="btn btn-primary btn-lg">Обнови</button>
                                         </div>
                                     </form>
                                 </div>

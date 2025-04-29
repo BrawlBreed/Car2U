@@ -1,0 +1,41 @@
+.card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: fit-content;
+  }
+  
+  .list-group {
+    display: flex;
+    flex-direction: column; /* Колоните една под друга */
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .list-group-item {
+    background: #f9f9f9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    width: 100% !important;
+    display: block; /* <- ADD THIS */
+    white-space: nowrap; /* <- ADD THIS */
+    transition: background 0.3s, color 0.3s;
+  }  
+  .list-group-item:hover {
+    color: #000;
+  }
+  
+  .list-group-item-action {
+    cursor: pointer;
+  }
+  
+  .marginStyle {
+    min-height: calc(100vh - 35vh); /* примерно 100px място за футър */
+  }
