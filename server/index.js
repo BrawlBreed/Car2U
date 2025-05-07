@@ -23,7 +23,7 @@ app.use('/api/car',carRoutes);
 app.use('/api/order',orderRoutes);
 
 app.use((req, res, next) => {
-    const allowedOrigins = ['https://car2-u.vercel.app', 'http://localhost:3000'];
+    const allowedOrigins = ['https://car2u.vercel.app', 'http://localhost:3000', 'https://car2u.bg'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.header('Access-Control-Allow-Origin', origin);
