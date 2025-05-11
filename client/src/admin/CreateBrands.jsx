@@ -2,126 +2,121 @@ import React, { useEffect, useState } from 'react';
 import AdminMenu from './AdminMenu';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Loading from './Loading'
+import Loading from './Loading';
 import toast from 'react-hot-toast';
 
 const CreateBrands = () => {
-    const [name, setName] = useState('');
-    const [brandPictures, setbrandPictures] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [brandPictures, setBrandPictures] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        setbrandPictures(files);
-    };
+  const handleImageChange = (e) => {
+    setBrandPictures(Array.from(e.target.files));
+  };
 
-    const validateForm = () => {
-        if (!name.trim()) {
-            toast.error('Brand name is required');
-            return false;
-        }
-        if (brandPictures.length === 0) {
-            toast.error('Please upload Brand Image');
-            return false;
-        }
-        return true;
-    };
+  const validateForm = () => {
+    if (!name.trim()) {
+      toast.error('Необходимо е име на марката');
+      return false;
+    }
+    if (brandPictures.length === 0) {
+      toast.error('Моля, качете изображение на марката');
+      return false;
+    }
+    return true;
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateForm()) {
-            return;
-        }
-        try {
-            setLoading(true)
-            const carData = new FormData();
-            carData.append('name', name);
-            console.log(brandPictures)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('name', name);
+      brandPictures.forEach((img) => formData.append('brandPictures', img));
 
-            brandPictures.forEach((image, index) => {
-                carData.append(`brandPictures`, image);
-            });
-            const { data } = await axios.post(`${process.env.REACT_APP_URL ?  process.env.REACT_APP_URL : process.env.REACT_APP_API_URL}/api/brand/create-brand`, carData);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_URL || process.env.REACT_APP_API_URL}/api/brand/create-brand`,
+        formData
+      );
 
-            if (data.success) {
-                toast.success('Brand Created Successfully');
-                navigate('/dashboard/admin/allbrands');
-            }
-            else {
-                toast.error(data.message);
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoading(false)
-        }
-    };
+      if (data.success) {
+        toast.success('Марка създадена успешно');
+        navigate('/dashboard/admin/allbrands');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    return (
-        <div className='container marginStyle'>
-            {!loading ? (
-                <div className='container-fluid'>
-                    <div className='row'>
-                        <div className='col-md-3'>
-                            <AdminMenu />
-                        </div>
-                        <div className='col-md-9 my-3'>
-                            <form method='post' enctype="multipart/form-data">
-                                <h1 className='text-center'>Create Brand</h1>
-                                <div className='m-1'>
-                                    <div className='mb-3'>
-                                        <input
-                                            type='text'
-                                            value={name}
-                                            placeholder='write the brand name'
-                                            className='form-control'
-                                            onChange={(e) => setName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div className='mb-3'>
-                                        {brandPictures.map((image, index) => (
-                                            <div key={index} className='text-center'>
-                                                <img
-                                                    src={URL.createObjectURL(image)}
-                                                    alt={`car_image_${index}`}
-                                                    className='img img-fluid'
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className='mb-3'>
-                                        <label className='btn btn-outline-primary col-md-12'>
-                                            Upload Images
-                                            <input
-                                                type='file'
-                                                name='productPictures'
-                                                accept='image/*'
-                                                multiple
-                                                onChange={handleImageChange}
-                                                hidden
-                                            />
-                                        </label>
-                                    </div>
-                                    <div className='mb-3'>
-                                        <button className='btn btn-success' onClick={handleSubmit}>
-                                            Create Brand
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+  return (
+    <div className="container marginStyle">
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-3">
+              <AdminMenu />
+            </div>
+            <div className="col-md-9 my-3">
+              <form onSubmit={handleSubmit} encType="multipart/form-data">
+                <h1 className="text-center">Създай марка</h1>
+                <div className="m-1">
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      value={name}
+                      placeholder="Въведете име на марката"
+                      className="form-control"
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    {brandPictures.map((img, i) => (
+                      <div key={i} className="text-center">
+                        <img
+                          src={URL.createObjectURL(img)}
+                          alt={`brand_image_${i}`}
+                          className="img img-fluid"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mb-3">
+                    <label className="btn btn-outline-primary col-md-12">
+                      Качи изображения
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        hidden
+                      />
+                    </label>
+                  </div>
+                  <div className="mb-3">
+                    <button className="btn btn-success">Създай марка</button>
+                  </div>
                 </div>
-            ) : <Loading />}
+              </form>
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default CreateBrands;

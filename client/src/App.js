@@ -29,6 +29,8 @@ import PrivacyPolicy from './Links/PrivacyPolicy';
 import TermsConditions from './Links/Terms';
 import CookiePolicy from './Links/Cookies';
 import CookieConsent from 'react-cookie-consent';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -61,6 +63,8 @@ function App() {
       <Route path='/' element={<HomeMain />} />
       <Route path='/cart' element={<Cart/>} />
       <Route path='/login' element={<Login />} />
+      <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path='/register' element={<Register />} />
       <Route path='/brands' element={<Brands />} />
       <Route path='/about' element={<About />} />

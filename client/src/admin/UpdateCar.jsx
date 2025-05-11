@@ -118,12 +118,12 @@ const UpdateCar = () => {
                             <div className='mb-3'>
                                 <input type='text' value={mileage} placeholder='write a car Mileage' className='form-control' onChange={(e) => setmileage(e.target.value)} />
                             </div>
-                            <div className='mb-3'>
+                            {/* <div className='mb-3'>
                                 <input type='text' value={safetyrating} placeholder='write a car Safetyrating' className='form-control' onChange={(e) => setsafetyrating(e.target.value)} />
                             </div>
                             <div className='mb-3'>
                                 <input type='text' value={warranty} placeholder='write a car Warranty' className='form-control' onChange={(e) => setwarranty(e.target.value)} />
-                            </div>
+                            </div> */}
                             <div className='mb-3'>
                                 <input type='text' value={seater} placeholder='write a car Seater' className='form-control' onChange={(e) => setseater(e.target.value)} />
                             </div>

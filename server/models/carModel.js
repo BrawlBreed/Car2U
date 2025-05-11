@@ -35,11 +35,11 @@ const carSchema = mongoose.Schema({
     },
     safetyrating:{
         type:String,
-        required:true
+        required:false
     },
     warranty:{
         type:String,
-        required:true
+        required:false
     },
     seater:{
         type:String,

@@ -21,39 +21,39 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateEmail(email)) {
-            toast.error('Invalid Email Format');
+            toast.error('Невалиден формат на имейл');
+            return false;
+        }
+        if (!name.trim()) {
+            toast.error('Името е задължително');
+            return false;
+        }
+        if (!email.trim()) {
+            toast.error('Имейлът е задължителен');
+            return false;
+        }
+        if (!password.trim()) {
+            toast.error('Паролата е задължителна');
+            return false;
+        }
+        if (!phone.trim()) {
+            toast.error('Телефонният номер е задължителен');
+            return false;
+        }
+        if (!address.trim()) {
+            toast.error('Адресът е задължителен');
             return false;
         }
         try {
-            const res = await axios.post(`${process.env.REACT_APP_URL ?  process.env.REACT_APP_URL : process.env.REACT_APP_API_URL}/api/user/register`, {
+            const res = await axios.post(`${process.env.REACT_APP_URL || process.env.REACT_APP_API_URL}/api/user/register`, {
                 name, email, password, phone, address
             });
             if (res.data.success) {
                 toast.success(res.data.message)
                 navigate('/login')
             }
-            if (!name.trim()) {
-                toast.error('Name is required');
-                return false;
-            }
-            if (!email.trim()) {
-                toast.error('Email is required');
-                return false;
-            }
-            if (!password.trim()) {
-                toast.error('Password is required');
-                return false;
-            }
-            if (!phone.trim()) {
-                toast.error('Phone Number is required');
-                return false;
-            }
-            if (!address.trim()) {
-                toast.error('Address is required');
-                return false;
-            }
         } catch (err) {
-            toast.error('Server Error')
+            toast.error('Грешка на сървъра')
         }
     }
 
@@ -62,61 +62,108 @@ const Register = () => {
     }, []);
 
     return (
-        <div>
-            <div className='marginStyle'>
-                <div class="container d-flex justify-content-center align-items-center">
-                    <div class="row border rounded-5 p-3 bg-white shadow box-area reverseCol">
-                        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
-                            <div class="featured-image mb-3 animateImg">
-                                <img src={register} class="img-fluid" width={500} />
-                            </div>
+        <div className='marginStyle'>
+            <div className="container d-flex justify-content-center align-items-center">
+                <div className="row border rounded-5 p-3 bg-white shadow box-area reverseCol">
+                    <div className="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+                        <div className="featured-image mb-3 animateImg">
+                            <img src={register} className="img-fluid" width={500} alt="Register" />
                         </div>
-                        <div class="col-md-6 right-box">
-                            <div class="row align-items-center">
-                                <div class="header-text mb-4">
-                                    <h2>Welcome</h2>
-                                    <p>Your Dream Car is Waiting !</p>
+                    </div>
+                    <div className="col-md-6 right-box">
+                        <div className="row align-items-center">
+                            <div className="header-text mb-4">
+                                <h2>Добре дошли</h2>
+                                <p>Вашата мечтана кола Ви очаква!</p>
+                            </div>
+                            <div className="input-group d-flex align-items-center mb-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <input
+                                        value={name}
+                                        onChange={e => setName(e.target.value)}
+                                        placeholder="Вашето име"
+                                        required
+                                        type="text"
+                                        className="form-control"
+                                    />
                                 </div>
-                                <div class="input-group d-flex  align-items-center mb-3">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Your name' required type="text" class="form-control" />
-                                    </div>
+                            </div>
+                            <div className="input-group d-flex align-items-center mb-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <input
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                        placeholder="Вашият имейл"
+                                        required
+                                        type="email"
+                                        className="form-control"
+                                    />
                                 </div>
-                                <div class="input-group d-flex flex-row align-items-center mb-3">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <input value={email} onChange={(e) => setEmail(e.target.value)} required type="email" placeholder='Your email ID' class="form-control " />
-                                    </div>
+                            </div>
+                            <div className="input-group d-flex align-items-center mb-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <input
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        placeholder="Вашата парола"
+                                        required
+                                        type="password"
+                                        className="form-control"
+                                    />
                                 </div>
-                                <div class="input-group d-flex flex-row align-items-center mb-3">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <input value={password} onChange={(e) => setPassword(e.target.value)} required type="password" placeholder='Your password' class="form-control " />
-                                    </div>
+                            </div>
+                            <div className="input-group d-flex align-items-center mb-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <input
+                                        value={phone}
+                                        onChange={e => setPhone(e.target.value)}
+                                        placeholder="Вашият телефон"
+                                        required
+                                        type="tel"
+                                        className="form-control"
+                                    />
                                 </div>
-                                <div class="input-group d-flex flex-row align-items-center mb-3">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <input value={phone} onChange={(e) => setPhone(e.target.value)} type="number" required placeholder='Your phone number' class="form-control " />
-                                    </div>
+                            </div>
+                            <div className="input-group d-flex align-items-center mb-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <input
+                                        value={address}
+                                        onChange={e => setAddress(e.target.value)}
+                                        placeholder="Вашият адрес"
+                                        required
+                                        type="text"
+                                        className="form-control"
+                                    />
                                 </div>
-                                <div class="input-group d-flex flex-row align-items-center mb-3">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <input value={address} onChange={(e) => setAddress(e.target.value)} type="text" required placeholder='Your address' class="form-control" />
-                                    </div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center mt-4">
+                                <div className="form-outline flex-fill mb-0">
+                                    <button
+                                        className="btn btn-lg text-white"
+                                        type="button"
+                                        onClick={handleSubmit}
+                                        style={{ backgroundColor: '#CC2B52', width: '100%' }}
+                                    >
+                                        Регистрация
+                                    </button>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mt-4 ">
-                                    <div class="form-outline flex-fill mb-0">
-                                        <button class="btn btn-lg  text-white" type="button" onClick={handleSubmit} style={{ backgroundColor: '#CC2B52', width: '100%' }} >Register</button>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-row align-items-center my-3 ">
-                                    <div class="form-outline flex-fill mb-0 " >
-                                        <Link to='/login' class="btn btn-outline-dark btn-lg btn-block" style={{ width: '100%' }} type="button">Login</Link>
-                                    </div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center my-3">
+                                <div className="form-outline flex-fill mb-0">
+                                    <Link
+                                        to='/login'
+                                        className="btn btn-outline-dark btn-lg btn-block"
+                                        style={{ width: '100%' }}
+                                        type="button"
+                                    >
+                                        Вход
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div >
-            </div >
+                </div>
+            </div>
         </div>
     )
 }

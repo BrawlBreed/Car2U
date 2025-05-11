@@ -43,8 +43,7 @@ const CarInBrand = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-12 text-center mb-2">
-                            <p className="brand_subtitle">Brand Collection !</p>
-                            <h2 className="brand_title">{brand.name} Car showcase</h2>
+                            <h2 className="brand_title">Колекция {brand.name}</h2>
                         </div>
                     </div>
                     {loading ?
@@ -72,7 +71,7 @@ const CarInBrand = () => {
             <div className="container">
                 <div className="row" style={{ marginBottom: '100px', marginTop: '-40px' }}>
                     <div className="col-12 text-center mb-5">
-                        <h2 className="brand_title">Available {brand.name} Cars in Stock</h2>
+                        <h2 className="brand_title">Налични {brand.name} модели</h2>
                     </div>
                     {Array.isArray(brand.carInvoleInThisBrand) ? (
                         brand.carInvoleInThisBrand.map((p) => (
@@ -84,12 +83,12 @@ const CarInBrand = () => {
                                             className=" rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
                                             style={{ width: '35px', height: '35px' }}>
                                             <p className="text-white mb-0 small">
-                                                <img src={brand.brandPictures} alt={brand.name} style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                                                <img src={brand.brandPictures[0]} alt={brand.name} style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'contain' }} />
                                             </p>
                                         </div>
                                     </div>
                                     <Link to={`/car/${p.slug}`} className='text-center'>
-                                        <img src={p.productPictures[4]} alt={p.name} style={{ maxWidth: '100%', maxHeight: '120px', objectFit: 'contain' }} className='border rounded' />
+                                        <img src={p.productPictures[0]} alt={p.name} style={{ maxWidth: '100%', maxHeight: '120px', objectFit: 'contain' }} className='border rounded' />
                                     </Link>
                                     <div className="card-body">
                                         <h4 className="text-center mb-4">{p.name}</h4>
@@ -102,7 +101,7 @@ const CarInBrand = () => {
                                             <h6 ><MdAirlineSeatReclineExtra /> : {p.seater} Seater</h6>
                                         </div>
                                         <div className='text-center'>
-                                            <Link className='btn my-2  ' style={{ backgroundColor: '#CC2B52', color: 'white' }} to={`/car/${p.slug}`}><AiOutlineEye size={20} className='pb-1' /> View</Link>
+                                            <Link className='btn my-2  ' style={{ backgroundColor: '#CC2B52', color: 'white' }} to={`/car/${p.slug}`}><AiOutlineEye size={20} className='pb-1' /> Разгледай</Link>
                                             <button className='btn btn-outline-primary my-2 mx-3 ' onClick={() => { setcart([...cart, p]); localStorage.setItem('cart', JSON.stringify([...cart, p])); notify() }} ><BiMessageAdd size={20} className='pb-1' /> Добави в запитване</button>
                                         </div>
                                     </div>

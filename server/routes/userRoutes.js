@@ -1,11 +1,13 @@
 const express = require('express');
-const {registerUser,loginUser,test,adminAuth,myOrders,getAllOrdersController,orderStatusController,updateProfile} = require('../controllers/userControllers');
+const {registerUser,loginUser,test,adminAuth,myOrders,getAllOrdersController,orderStatusController,updateProfile, forgotPassword, resetPassword} = require('../controllers/userControllers');
 const {requireLogin,isAdmin} = require('../middleware/authMiddleware');
 
 const router = express.Router()
 
 router.post('/register',registerUser);
 router.post('/login',loginUser);
+router.post('/forgot-password', forgotPassword)
+router.post('/reset-password', resetPassword)
 router.put('/profileUpdate',requireLogin,updateProfile);
 
 router.get('/user-auth',requireLogin, (req,res) => {

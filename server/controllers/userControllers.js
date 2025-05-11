@@ -1,4 +1,6 @@
 const { hashPassword, comparePassword } = require("../auth/auth")
+const crypto = require("crypto")
+const nodemailer = require("nodemailer")
 const userModel = require("../models/userModel")
 const orderModel = require("../models/orderModel")
 const JWT = require('jsonwebtoken')
@@ -205,4 +207,84 @@ const orderStatusController = async(req,res) => {
       }
 }
 
-module.exports = {registerUser,loginUser,test,myOrders,getAllOrdersController,orderStatusController,updateProfile}
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body
+    if (!email) {
+      return res.status(400).send({ success: false, message: 'Имейлът е задължителен' })
+    }
+    const user = await userModel.findOne({ email })
+    if (!user) {
+      return res.status(200).send({ success: false, message: 'Потребителят не е намерен' })
+    }
+
+    // генерираме токен и срок
+    const token = crypto.randomBytes(20).toString('hex')
+    const expire = Date.now() + 3600000 // 1 час
+    user.resetPasswordToken = token
+    user.resetPasswordExpire = expire
+    await user.save()
+
+    // конфигурираме nodemailer
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,            // smtp.zoho.com
+      port: Number(process.env.SMTP_PORT),    // 587
+      secure: false,                          // STARTTLS, not SSL
+      requireTLS: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      },
+      connectionTimeout: 10000,
+      greetingTimeout:   10000,
+      socketTimeout:     10000
+    })
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${token}`
+    const message = `
+      Здравейте ${user.name},
+      
+      Получихме заявка за нулиране на парола. Натиснете линка:
+      ${resetUrl}
+
+      Линкът е валиден 1 час.
+
+      Ако не вие сте поискали това, игнорирайте имейла.
+    `
+
+    await transporter.sendMail({
+      from: `"Car2U Support" <${process.env.SMTP_USER}>`, // НЕ използвай FROM_EMAIL различен от SMTP_USER
+      to: user.email,
+      subject: 'Нулиране на парола',
+      text: message
+    })
+
+    res.status(200).send({ success: true, message: 'Пратен е имейл за нулиране на парола' })
+  } catch (err) {
+    console.log(err)
+    console.error(err)
+    res.status(500).send({ success: false, message: 'Грешка на сървъра' })
+  }
+}
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body
+    const user = await userModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpire: { $gt: Date.now() }
+    })
+    if (!user) {
+      return res.status(400).send({ success: false, message: 'Невалиден или изтекъл токен' })
+    }
+    user.password = password // middleware трябва да хешира
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
+    await user.save()
+    res.status(200).send({ success: true, message: 'Паролата е нулирана успешно' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({ success: false, message: 'Невалиден или изтекъл токен' })
+  }
+}
+
+module.exports = {registerUser,loginUser,test,myOrders,getAllOrdersController,orderStatusController,updateProfile, resetPassword, forgotPassword}
