@@ -77,12 +77,12 @@ const CarView = () => {
                 :
                 <div className="row">
                     <div className="col-md-6 text-center">
-                        <ReactImageTurntable
+                        {/* <ReactImageTurntable
                             images={car.productPictures}
                             className='border border-4 rounded'
                             style={{ cursor: '-webkit-grab' }}
                         />
-                        <Tb360View size={50} className='' /><br />
+                        <Tb360View size={50} className='' /><br /> */}
                         <div>
                             <ImageGallery
                                 items={galleryImages}
@@ -109,7 +109,7 @@ const CarView = () => {
                         </div>
                         <h4>{car.name} - Описание:</h4><h6 className='lh-base ' style={{ textAlign: 'justify' }}>{car.description}</h6>
                         <h4>Цена: {car.price} евро</h4>
-                        <h4>Публикувано на: {updatedAt}</h4>
+                        <h6>Публикувано на: {updatedAt}</h6>
                         <button style={{ backgroundColor: '#CC2B52' }} className='btn text-white my-1' onClick={() => { setcart([...cart, car]); localStorage.setItem('cart', JSON.stringify([...cart, car])); notify() }} ><BiMessageAdd size={20} className='pb-1' /> Добави в запитване</button>
                         <Link className='btn btn-outline-primary mx-2' to='/cart'><AiOutlineEye size={20} className='pb-1' /> Виж запитване</Link>
                         <div className="table-responsive">
@@ -123,16 +123,17 @@ const CarView = () => {
                                         <td scope="row" className='p-3'>
                                             <p className='text-secondary '><TbEngine size={25} /> Разход</p>
                                             <h5>{car.mileage}</h5>
-                                        </td><td scope="row" className='p-3'>
-                                            <p className='text-secondary '><TbStars size={25} /> Оценка на безопасност</p>
-                                            <h5>{car.safetyrating}</h5>
+                                        </td>
+                                        <td scope="row" className='p-3'>
+                                            <p className='text-secondary '><TbStars size={25} /> Услуга на внос</p>
+                                            <h5>Да ✔️</h5>
                                         </td>
                                     </tr>
         
                                     <tr>
                                         <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><GiBackwardTime size={25} /> Гаранция</p>
-                                            <h5>{car.warranty}</h5>
+                                            <p className='text-secondary '><GiBackwardTime size={25} /> Доставка</p>
+                                            <h5>Да ✔️</h5>
                                         </td>
                                         <td scope="row" className='p-3'>
                                             <p className='text-secondary '><MdAirlineSeatReclineExtra size={25} /> Места</p>
@@ -181,7 +182,7 @@ const CarView = () => {
                                                 </Link>
                                             </div>
                                             <Link to={`/car/${p.slug}`} className='text-center'>
-                                                <img src={p.productPictures[4]} alt={p.name} style={{ maxWidth: '100%', maxHeight: '120px', objectFit: 'contain' }} className='border rounded' />
+                                                <img src={p.productPictures[0]} alt={p.name} style={{ maxWidth: '100%', maxHeight: '120px', objectFit: 'contain' }} className='border rounded' />
                                             </Link>
                                             <div className="card-body">
                                                 <h4 className="text-center mb-4">{p.name}</h4>

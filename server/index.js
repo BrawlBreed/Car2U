@@ -9,9 +9,13 @@ const cors = require('cors')
 const app = express();
 
 app.use(cors({
-    origin: '*', // or specify your frontend domain
-  }));
+  origin: '*',   // or '*' for any origin
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
+}));
 
+app.use(express.json({ limit: '10mb' }));  // need bigger limit for base64 payloads
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 dotenv.config()
 

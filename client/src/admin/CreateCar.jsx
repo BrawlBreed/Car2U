@@ -89,7 +89,7 @@ const CreateCar = () => {
         toast.error('Грешка при създаване на автомобил');
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
     } finally {
       setLoading(false);
     }
