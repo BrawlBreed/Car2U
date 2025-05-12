@@ -6,7 +6,6 @@ const connection = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
           })
-        console.log('Car Connected to MongoDB');
     }catch(err){
         console.log('Connection Failed',err);
     }

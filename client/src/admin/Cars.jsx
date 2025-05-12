@@ -88,7 +88,7 @@ const Cars = () => {
                       <Link to={`/dashboard/admin/car/${car.slug}`}>
                         <img
                           className="border rounded mx-auto d-block"
-                          src={car.productPictures}
+                          src={car.productPictures[0]}
                           alt={car.name}
                           style={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain' }}
                         />

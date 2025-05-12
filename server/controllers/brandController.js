@@ -26,7 +26,6 @@ const uploadFileToCloudinary = async (filePath) => {
     const result = await cloudinary.uploader.upload(filePath, {
         folder: 'brands'
     });
-    console.log(result.secure_url)
     return result.secure_url;
 };
 

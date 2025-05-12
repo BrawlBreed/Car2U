@@ -7,12 +7,19 @@ const orderRoutes = require('./routes/orderRoutes')
 const carRoutes = require('./routes/carRoutes')
 const cors = require('cors')
 const app = express();
+const path = require('path');
+const fs   = require('fs');
 
 app.use(cors({
   origin: '*',   // or '*' for any origin
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
+
+const UPLOAD_DIR = path.resolve(__dirname, 'uploads');
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 app.use(express.json({ limit: '10mb' }));  // need bigger limit for base64 payloads
 app.use(express.urlencoded({ extended: true }));
