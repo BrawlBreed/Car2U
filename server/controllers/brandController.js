@@ -1,5 +1,6 @@
 const { default: slugify } = require('slugify');
 const brandModel = require('../models/carBrand');
+const carModel = require('../models/carModel');
 const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
 
@@ -116,20 +117,26 @@ const updateBrand = async (req, res) => {
 };
 
 const deleteBrand = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await brandModel.findByIdAndDelete(id);
-    res.status(200).send({
-      success: true,
-      message: "Brand Deleted Successfully"
-    });
-  } catch (err) {
-    res.status(500).send({
-      success: false,
-      message: "Error in Deleting Brand",
-      err
-    });
-  }
+    try {
+      const { id } = req.params;
+  
+      // Delete all cars related to this brand
+      await carModel.deleteMany({ brand: id });
+  
+      // Delete the brand
+      await brandModel.findByIdAndDelete(id);
+  
+      res.status(200).send({
+        success: true,
+        message: "Brand and associated cars deleted successfully"
+      });
+    } catch (err) {
+      res.status(500).send({
+        success: false,
+        message: "Error in deleting brand and related cars",
+        err
+      });
+    }
 };
 
 module.exports = {
