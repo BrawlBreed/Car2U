@@ -1,49 +1,21 @@
 const { default: slugify } = require("slugify");
 const carModel = require("../models/carModel");
-const orderModel = require("../models/orderModel");
 const brandModel = require("../models/carBrand");
-const multer = require("multer");
-const path = require("path");
-const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs");
+require("dotenv").config();
 
-dotenv.config();
-
-// Cloudinary config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadFileToCloudinary = async (filePath) => {
-    const result = await cloudinary.uploader.upload(filePath, {
-        folder: 'brands'
-    });
-    return result.secure_url;
+const uploadBase64ToCloudinary = async (base64String) => {
+  const result = await cloudinary.uploader.upload(base64String, {
+    folder: "cars",
+  });
+  return result.secure_url;
 };
-
-const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
-
-// 2) Ensure the folder exists:
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
-// 2) configure multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // destination must be a string
-    cb(null, UPLOADS_DIR);
-  },
-  filename: (req, file, cb) => {
-    // originalname is guaranteed, so this is a valid string
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
 
 const createCar = async (req, res) => {
   try {
@@ -59,6 +31,7 @@ const createCar = async (req, res) => {
       seater,
       size,
       fuelTank,
+      productBase64Images,
     } = req.body;
 
     const requiredFields = [
@@ -73,20 +46,19 @@ const createCar = async (req, res) => {
       "seater",
       "size",
       "fuelTank",
+      "productBase64Images"
     ];
+
     for (let field of requiredFields) {
-      if (!req.body[field]) {
+      if (!req.body[field] || (Array.isArray(req.body[field]) && req.body[field].length === 0)) {
         return res
           .status(400)
           .send({ success: false, message: `${field} is Required` });
       }
     }
 
-    const uploadedFiles = await Promise.all(
-      req.files.map(async (file) => {
-        const url = await uploadFileToCloudinary(file.path);
-        return url;
-      })
+    const uploadedUrls = await Promise.all(
+      productBase64Images.map(uploadBase64ToCloudinary)
     );
 
     const slug = slugify(name);
@@ -96,7 +68,7 @@ const createCar = async (req, res) => {
       slug,
       description,
       brand,
-      productPictures: uploadedFiles,
+      productPictures: uploadedUrls,
       price,
       fuelType,
       transmission,
@@ -169,7 +141,6 @@ const getCarById = async (req, res) => {
 
 const deleteCar = async (req, res) => {
   try {
-    const carModel_ = await carModel.findById(req.params.pid);
     await carModel.findByIdAndDelete(req.params.pid);
     res.status(200).send({
       success: true,
@@ -197,15 +168,17 @@ const updatecar = async (req, res) => {
       size,
       fuelTank,
       price,
-    } = req.fields;
+    } = req.body;
 
-    const car = await carModel.findByIdAndUpdate(
-      req.params.pid,
-      { ...req.fields, slug: slugify(name) },
-      { new: true }
-    );
+    const updatedFields = {
+      ...req.body,
+      ...(name && { slug: slugify(name) }),
+    };
 
-    await car.save();
+    const car = await carModel.findByIdAndUpdate(req.params.pid, updatedFields, {
+      new: true,
+    });
+
     res.status(201).send({
       success: true,
       message: "Car Updated Successfully",
@@ -246,7 +219,6 @@ const relatedCar = async (req, res) => {
 };
 
 module.exports = {
-  upload,
   createCar,
   getAllCar,
   getCarById,

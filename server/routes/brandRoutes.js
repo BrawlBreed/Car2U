@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/getAll-brand',getBrand);
 router.get('/getBrandBtId-brand/:slug',getBrandById);
-router.post('/create-brand',upload.single('brandPictures'),requireLogin, isAdmin,createBrand);
+router.post('/create-brand',requireLogin, isAdmin,createBrand);
 router.put('/update-brand/:id',requireLogin,isAdmin,updateBrand);
 router.delete('/delete-brand/:id',requireLogin,isAdmin,deleteBrand);
 

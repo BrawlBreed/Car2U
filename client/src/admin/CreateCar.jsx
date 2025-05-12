@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminMenu from './AdminMenu';
 import axios from 'axios';
-import { Select, Modal } from 'antd';
+import { Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 import toast from 'react-hot-toast';
@@ -15,6 +15,7 @@ const CreateCar = () => {
   const [description, setDescription] = useState('');
   const [shipping, setShipping] = useState('');
   const [productPictures, setProductPictures] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
   const [price, setPrice] = useState('');
   const [fuelType, setFuelType] = useState('');
   const [transmission, setTransmission] = useState('');
@@ -28,19 +29,19 @@ const CreateCar = () => {
   const navigate = useNavigate();
 
   const validateForm = () => {
-    if (!brand.trim()) { toast.error('Необходима е марка'); return false; }
-    if (productPictures.length === 0) { toast.error('Добавете поне една снимка'); return false; }
-    if (!name.trim()) { toast.error('Необходимо е име'); return false; }
-    if (!price.trim()) { toast.error('Необходима е цена'); return false; }
-    if (!fuelType.trim()) { toast.error('Необходимо е тип гориво'); return false; }
-    if (!transmission.trim()) { toast.error('Необходима е трансмисия'); return false; }
-    if (!engineSize.trim()) { toast.error('Необходим е обем двигател'); return false; }
-    if (!mileage.trim()) { toast.error('Необходимо е пробег'); return false; }
-    if (!seater.trim()) { toast.error('Необходим е брой места'); return false; }
-    if (!size.trim()) { toast.error('Необходими са размери'); return false; }
-    if (!fuelTank.trim()) { toast.error('Необходим е резервоар'); return false; }
-    if (!description.trim()) { toast.error('Необходимо е описание'); return false; }
-    if (!shipping.trim()) { toast.error('Необходимо е доставка'); return false; }
+    if (!brand.trim()) return toast.error('Необходима е марка') || false;
+    if (productPictures.length === 0) return toast.error('Добавете поне една снимка') || false;
+    if (!name.trim()) return toast.error('Необходимо е име') || false;
+    if (!price.trim()) return toast.error('Необходима е цена') || false;
+    if (!fuelType.trim()) return toast.error('Необходимо е тип гориво') || false;
+    if (!transmission.trim()) return toast.error('Необходима е трансмисия') || false;
+    if (!engineSize.trim()) return toast.error('Необходим е обем двигател') || false;
+    if (!mileage.trim()) return toast.error('Необходимо е пробег') || false;
+    if (!seater.trim()) return toast.error('Необходим е брой места') || false;
+    if (!size.trim()) return toast.error('Необходими са размери') || false;
+    if (!fuelTank.trim()) return toast.error('Необходим е резервоар') || false;
+    if (!description.trim()) return toast.error('Необходимо е описание') || false;
+    if (!shipping.trim()) return toast.error('Необходимо е доставка') || false;
     return true;
   };
 
@@ -55,8 +56,19 @@ const CreateCar = () => {
     }
   };
 
-  const handleImageChange = (e) => {
-    setProductPictures(Array.from(e.target.files));
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleImageChange = async (e) => {
+    const files = Array.from(e.target.files);
+    setProductPictures(files);
+    setPreviewImages(files.map(file => URL.createObjectURL(file)));
   };
 
   const handleSubmit = async (e) => {
@@ -64,24 +76,32 @@ const CreateCar = () => {
     if (!validateForm()) return;
     try {
       setLoading(true);
-      const carData = new FormData();
-      carData.append('name', name);
-      carData.append('description', description);
-      carData.append('shipping', shipping);
-      carData.append('brand', brand);
-      carData.append('price', price);
-      carData.append('fuelType', fuelType);
-      carData.append('transmission', transmission);
-      carData.append('engineSize', engineSize);
-      carData.append('mileage', mileage);
-      carData.append('seater', seater);
-      carData.append('size', size);
-      carData.append('fuelTank', fuelTank);
-      productPictures.forEach(image => carData.append('productPictures', image));
+
+      const base64Images = await Promise.all(
+        productPictures.map((file) => convertToBase64(file))
+      );
+
+      const carData = {
+        name,
+        description,
+        shipping,
+        brand,
+        price,
+        fuelType,
+        transmission,
+        engineSize,
+        mileage,
+        seater,
+        size,
+        fuelTank,
+        productBase64Images: base64Images,
+      };
+
       const { data } = await axios.post(
         `${process.env.REACT_APP_URL || process.env.REACT_APP_API_URL}/api/car/create-car`,
         carData
       );
+
       if (data.success) {
         toast.success('Автомобилът беше създаден успешно');
         navigate('/dashboard/admin/cars');
@@ -90,12 +110,16 @@ const CreateCar = () => {
       }
     } catch (err) {
       console.error(err.message);
+      toast.error('Възникна грешка при създаването');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { getAllCar(); window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    getAllCar();
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="container marginStyle">
@@ -104,7 +128,7 @@ const CreateCar = () => {
           <div className="row">
             <div className="col-md-3"><AdminMenu /></div>
             <div className="col-md-9 my-3">
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <form onSubmit={handleSubmit}>
                 <h1 className="text-center">Създаване на автомобил</h1>
                 <Select
                   bordered={false}
@@ -118,26 +142,28 @@ const CreateCar = () => {
                     <Option key={c._id} value={c._id}>{c.name}</Option>
                   ))}
                 </Select>
+
                 <div className="mb-3">
-                  {productPictures.map((img,i)=>(
-                    <img key={i} src={URL.createObjectURL(img)} alt={i} className="img-fluid" />
+                  {previewImages.map((img, i) => (
+                    <img key={i} src={img} alt={`preview-${i}`} className="img-fluid" />
                   ))}
                 </div>
+
                 <label className="btn btn-outline-primary mb-3">
                   Качи снимки
                   <input type="file" accept="image/*" multiple hidden onChange={handleImageChange} />
                 </label>
-                {/** text inputs **/}
-                <div className="mb-3"><input type="text" placeholder="Име на автомобила" className="form-control" value={name} onChange={e=>setName(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Цена" className="form-control" value={price} onChange={e=>setPrice(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Тип гориво" className="form-control" value={fuelType} onChange={e=>setFuelType(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Трансмисия" className="form-control" value={transmission} onChange={e=>setTransmission(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Обем двигател" className="form-control" value={engineSize} onChange={e=>setEngineSize(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Пробег" className="form-control" value={mileage} onChange={e=>setMileage(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Брой места" className="form-control" value={seater} onChange={e=>setSeater(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Размери" className="form-control" value={size} onChange={e=>setSize(e.target.value)} /></div>
-                <div className="mb-3"><input type="text" placeholder="Резервоар" className="form-control" value={fuelTank} onChange={e=>setFuelTank(e.target.value)} /></div>
-                <div className="mb-3"><textarea rows={3} placeholder="Описание" className="form-control" value={description} onChange={e=>setDescription(e.target.value)} /></div>
+
+                <div className="mb-3"><input type="text" placeholder="Име на автомобила" className="form-control" value={name} onChange={e => setName(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Цена" className="form-control" value={price} onChange={e => setPrice(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Тип гориво" className="form-control" value={fuelType} onChange={e => setFuelType(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Трансмисия" className="form-control" value={transmission} onChange={e => setTransmission(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Обем двигател" className="form-control" value={engineSize} onChange={e => setEngineSize(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Пробег" className="form-control" value={mileage} onChange={e => setMileage(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Брой места" className="form-control" value={seater} onChange={e => setSeater(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Размери" className="form-control" value={size} onChange={e => setSize(e.target.value)} /></div>
+                <div className="mb-3"><input type="text" placeholder="Резервоар" className="form-control" value={fuelTank} onChange={e => setFuelTank(e.target.value)} /></div>
+                <div className="mb-3"><textarea rows={3} placeholder="Описание" className="form-control" value={description} onChange={e => setDescription(e.target.value)} /></div>
                 <Select
                   bordered={false}
                   placeholder="Доставка"

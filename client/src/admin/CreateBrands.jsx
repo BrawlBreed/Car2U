@@ -8,12 +8,26 @@ import toast from 'react-hot-toast';
 const CreateBrands = () => {
   const [name, setName] = useState('');
   const [brandPictures, setBrandPictures] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
-    setBrandPictures(Array.from(e.target.files));
+    const file = e.target.files[0];
+    if (file) {
+      setBrandPictures([file]);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
   };
 
   const validateForm = () => {
@@ -33,13 +47,11 @@ const CreateBrands = () => {
     if (!validateForm()) return;
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append('name', name);
-      brandPictures.forEach((img) => formData.append('brandPictures', img));
+      const base64Image = await convertToBase64(brandPictures[0]);
 
       const { data } = await axios.post(
         `${process.env.REACT_APP_URL || process.env.REACT_APP_API_URL}/api/brand/create-brand`,
-        formData
+        { name, brandBase64Image: base64Image }
       );
 
       if (data.success) {
@@ -50,6 +62,7 @@ const CreateBrands = () => {
       }
     } catch (err) {
       console.error(err);
+      toast.error('Възникна грешка при създаването');
     } finally {
       setLoading(false);
     }
@@ -70,7 +83,7 @@ const CreateBrands = () => {
               <AdminMenu />
             </div>
             <div className="col-md-9 my-3">
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <form onSubmit={handleSubmit}>
                 <h1 className="text-center">Създай марка</h1>
                 <div className="m-1">
                   <div className="mb-3">
@@ -83,31 +96,24 @@ const CreateBrands = () => {
                       required
                     />
                   </div>
-                  <div className="mb-3">
-                    {brandPictures.map((img, i) => (
-                      <div key={i} className="text-center">
-                        <img
-                          src={URL.createObjectURL(img)}
-                          alt={`brand_image_${i}`}
-                          className="img img-fluid"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  {previewImage && (
+                    <div className="mb-3 text-center">
+                      <img src={previewImage} alt="preview" className="img img-fluid" />
+                    </div>
+                  )}
                   <div className="mb-3">
                     <label className="btn btn-outline-primary col-md-12">
-                      Качи изображения
+                      Качи изображение
                       <input
                         type="file"
                         accept="image/*"
-                        multiple
                         onChange={handleImageChange}
                         hidden
                       />
                     </label>
                   </div>
                   <div className="mb-3">
-                    <button className="btn btn-success">Създай марка</button>
+                    <button type="submit" className="btn btn-success">Създай марка</button>
                   </div>
                 </div>
               </form>
