@@ -70,16 +70,16 @@ const CarsHome = () => {
                                         </div>
                                     </div>
                                     <Link to={`/car/${p.slug}`} className='text-center'>
-                                        <img src={p.productPictures} alt={p.name} style={{ maxWidth: '100%', maxHeight: '130px', objectFit: 'contain' }} className='border rounded' />
+                                        <img src={p.productPictures[0]} alt={p.name} style={{ maxWidth: '100%', maxHeight: '130px', objectFit: 'contain' }} className='border rounded' />
                                     </Link>
                                     <div className="card-body ">
                                         <h4 className="text-center mb-4 respName">{p.name}</h4>
                                         <div className="d-flex justify-content-between">
-                                            <h6 className='respBrand'><FaEuroSign /> : {p.price} Euro</h6>
+                                            <h6 className='respBrand'><FaEuroSign /> : {p.price}</h6>
                                             <h6 className='respBrand'><BsFuelPumpFill /> : {p.fuelType}</h6>
                                         </div>
                                         <div className="d-flex justify-content-between my-2">
-                                            <h6 className='respBrand'><TbStars /> : {p.safetyrating}</h6>
+                                            <h6 className='respBrand'><TbStars />: Внос ✔️</h6>
                                             <h6 className='respBrand'><MdAirlineSeatReclineExtra /> : {p.seater} Seater</h6>
                                         </div>
                                         <div className='text-center'>

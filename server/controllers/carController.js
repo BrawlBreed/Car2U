@@ -17,20 +17,33 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
-const upload = multer({ storage });
-
 const uploadFileToCloudinary = async (filePath) => {
-  const result = await cloudinary.uploader.upload(filePath, {
-    folder: "cars",
-  });
-  fs.unlinkSync(filePath);
-  return result.secure_url;
+    const result = await cloudinary.uploader.upload(filePath, {
+        folder: 'brands'
+    });
+    return result.secure_url;
 };
+
+const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
+
+// 2) Ensure the folder exists:
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
+// 2) configure multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // destination must be a string
+    cb(null, UPLOADS_DIR);
+  },
+  filename: (req, file, cb) => {
+    // originalname is guaranteed, so this is a valid string
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 const createCar = async (req, res) => {
   try {

@@ -83,7 +83,7 @@ const CarInBrand = () => {
                                             className=" rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
                                             style={{ width: '35px', height: '35px' }}>
                                             <p className="text-white mb-0 small">
-                                                <img src={brand.brandPictures[0]} alt={brand.name} style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                                                <img src={brand.brandPictures} alt={brand.name} style={{ maxWidth: '100%', maxHeight: '150px', objectFit: 'contain' }} />
                                             </p>
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@ const CarInBrand = () => {
                                             <h6 ><BsFuelPumpFill /> : {p.fuelType}</h6>
                                         </div>
                                         <div className="d-flex justify-content-between my-2">
-                                            <h6 ><TbStars /> : {p.safetyrating}</h6>
+                                            <h6 ><TbStars />: Внос ✔️</h6>
                                             <h6 ><MdAirlineSeatReclineExtra /> : {p.seater} Seater</h6>
                                         </div>
                                         <div className='text-center'>

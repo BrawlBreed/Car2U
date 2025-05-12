@@ -6,16 +6,24 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
 
+const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
+
+// 2) Ensure the folder exists:
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+      // destination must be a string
+      cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+      // originalname is guaranteed, so this is a valid string
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 const upload = multer({ storage });
-
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
