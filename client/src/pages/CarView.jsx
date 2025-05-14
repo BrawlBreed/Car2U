@@ -58,8 +58,14 @@ const CarView = () => {
     
     const notify = () => toast.success('Успешно добавено в запитване');
     
-    const updatedAt = new Date(car.updatedAt).toLocaleString();
-    
+    const updatedAt = new Date(car.updatedAt).toLocaleString('bg-BG', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+          
     const galleryImages = car.productPictures.map(picture => ({
         original: picture,
         thumbnail: picture
@@ -107,59 +113,60 @@ const CarView = () => {
                             </Link>
                             <h3 className="mb-3 mt-2">{car.name}</h3>
                         </div>
-                        <h4>{car.name} - Описание:</h4><h6 className='lh-base ' style={{ textAlign: 'justify' }}>{car.description}</h6>
-                        <h4>Цена: {car.price} евро</h4>
+                        <h4>Описание на {car.name}</h4><h6 className='lh-base ' style={{ textAlign: 'justify' }}>{car.description}</h6>
+                        <h4>Цена: {car.price} €</h4>
                         <h6>Публикувано на: {updatedAt}</h6>
                         <button style={{ backgroundColor: '#CC2B52' }} className='btn text-white my-1' onClick={() => { setcart([...cart, car]); localStorage.setItem('cart', JSON.stringify([...cart, car])); notify() }} ><BiMessageAdd size={20} className='pb-1' /> Добави в запитване</button>
                         <Link className='btn btn-outline-primary mx-2' to='/cart'><AiOutlineEye size={20} className='pb-1' /> Виж запитване</Link>
                         <div className="table-responsive">
-                            <table className="table table-bordered my-4">                            
-                                <thead>
-                                    <tr>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><BsFuelPumpFill size={25} /> Тип гориво</p>
-                                            <h5>{car.fuelType}</h5>
-                                        </td>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><TbEngine size={25} /> Разход</p>
-                                            <h5>{car.mileage}</h5>
-                                        </td>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><TbStars size={25} /> Услуга на внос</p>
-                                            <h5>Да ✔️</h5>
-                                        </td>
-                                    </tr>
-        
-                                    <tr>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><GiBackwardTime size={25} /> Доставка</p>
-                                            <h5>Да ✔️</h5>
-                                        </td>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><MdAirlineSeatReclineExtra size={25} /> Места</p>
-                                            <h5>{car.seater}</h5>
-                                        </td><td scope="row" className='p-3'>
-                                            <p className='text-secondary '><MdCompareArrows size={25} /> Размер</p>
-                                            <h5>{car.size}</h5>
-                                        </td>
-                                    </tr>
-        
-                                    <tr>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><MdOutlinePropaneTank size={25} /> Резервоар</p>
-                                            <h5>{car.fuelTank}</h5>
-                                        </td>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><AiOutlineColumnWidth size={25} /> Двигател</p>
-                                            <h5>{car.engineSize}</h5>
-                                        </td>
-                                        <td scope="row" className='p-3'>
-                                            <p className='text-secondary '><AiOutlineNodeIndex size={25} /> Скорости</p>
-                                            <h5>{car.transmission}</h5>
-                                        </td>
-                                    </tr>
-                                </thead>
-                            </table>
+                        <table className="table table-bordered my-4">
+  <thead>
+    <tr>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><TbEngine size={25} /> Пробег</p>
+        <h5>{car.mileage}</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><AiOutlineColumnWidth size={25} /> Двигател</p>
+        <h5>{car.engineSize}</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><AiOutlineNodeIndex size={25} /> Скорости</p>
+        <h5>{car.transmission}</h5>
+      </td>
+    </tr>
+
+    <tr>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><BsFuelPumpFill size={25} /> Тип гориво</p>
+        <h5>{car.fuelType}</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><MdOutlinePropaneTank size={25} /> Резервоар</p>
+        <h5>{car.fuelTank}</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><MdAirlineSeatReclineExtra size={25} /> Места</p>
+        <h5>{car.seater}</h5>
+      </td>
+    </tr>
+
+    <tr>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><MdCompareArrows size={25} /> Размер</p>
+        <h5>{car.size}</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><TbStars size={25} /> Услуга на внос</p>
+        <h5>Да ✔️</h5>
+      </td>
+      <td scope="row" className='p-3'>
+        <p className='text-secondary '><GiBackwardTime size={25} /> Доставка</p>
+        <h5>Да ✔️</h5>
+      </td>
+    </tr>
+  </thead>
+</table>
                         </div>
                     </div>
                     <div className="container mt-5">

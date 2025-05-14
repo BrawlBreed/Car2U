@@ -29,7 +29,7 @@ const Footer = () => {
                         <div className="col-lg-3 mb-4 mb-lg-0">
                             <h3 className="footer_title" style={{ color: '#CC2B52' }}>Социални мрежи</h3>
                             <p>
-                                <a href="https://www.facebook.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsFacebook size={25} /></a>
+                                <a href="https://www.facebook.com/share/16CA9giZ2W/?mibextid=wwXIfr" className="footer_social_media_icon" style={{ color: 'white' }}><BsFacebook size={25} /></a>
                                 <a href="https://www.instagram.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsInstagram size={25} /></a>
                                 <a href="https://www.linkedin.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsLinkedin size={25} /></a>
                                 <a href="https://www.tiktok.com" className="footer_social_media_icon" style={{ color: 'white' }}><BsTiktok size={25} /></a>
